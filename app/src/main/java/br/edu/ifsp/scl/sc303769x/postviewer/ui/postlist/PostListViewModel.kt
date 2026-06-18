@@ -1,6 +1,8 @@
 package br.edu.ifsp.scl.sc303769x.postviewer.ui.postlist
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import br.edu.ifsp.scl.sc303769x.postviewer.PostViewerApplication
 import androidx.lifecycle.viewModelScope
 import br.edu.ifsp.scl.sc303769x.postviewer.data.repository.PostRepository
 import br.edu.ifsp.scl.sc303769x.postviewer.model.Post
@@ -16,8 +18,8 @@ sealed class PostListState {
     data class Error(val message: String) : PostListState()
 }
 
-class PostListViewModel : ViewModel() {
-    private val repository = PostRepository()
+class PostListViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository = (application as PostViewerApplication).repository
 
     // Estado observável pela UI. O underline impede alterações diretas de fora do ViewModel.
     private val _state = MutableStateFlow<PostListState>(PostListState.Loading)

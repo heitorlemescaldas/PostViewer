@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,7 @@ fun PostDetailScreen(
     viewModel: PostDetailViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    var commentText by remember { mutableStateOf("") }
 
     // Dispara a busca de comentários assim que o ecrã for composto pela primeira vez
     // (O bloco LaunchedEffect roda a sua rotina se o postId for diferente da renderização anterior)
@@ -45,6 +49,45 @@ fun PostDetailScreen(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
+        },
+        bottomBar = {
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                tonalElevation = 8.dp
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .imePadding()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = commentText,
+                        onValueChange = { commentText = it },
+                        modifier = Modifier.weight(1f),
+                        placeholder = { Text("Adicionar comentário...") },
+                        maxLines = 3
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            if (commentText.isNotBlank()) {
+                                viewModel.addLocalComment(
+                                    postId = postId,
+                                    name = "Usuário Local",
+                                    email = "usuario@local.com",
+                                    body = commentText
+                                )
+                                commentText = ""
+                            }
+                        }
+                    ) {
+                        Text("Enviar")
+                    }
+                }
+            }
         }
     ) { innerPadding ->
         Box(
