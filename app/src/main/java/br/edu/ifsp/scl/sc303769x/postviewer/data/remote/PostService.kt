@@ -11,4 +11,8 @@ interface PostService {
 
     @GET("posts/{id}/comments")
     suspend fun getCommentsByPostId(@Path("id") postId: Int): List<Comment>
+
+    //Retorna todos os comentarios
+    @GET("comments")
+    suspend fun getAllComments(): List<Comment>
 }

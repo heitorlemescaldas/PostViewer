@@ -35,6 +35,26 @@ class PostRepository(private val localCommentDao: LocalCommentDao) {
         }
     }
 
+    // Obtém todos os comentários remotamente
+    suspend fun getAllRemoteComments(): List<Comment> {
+        return RetrofitInstance.api.getAllComments()
+    }
+
+    // Retorna todos os comentários locais
+    fun getAllLocalComments(): Flow<List<Comment>> {
+        return localCommentDao.getAllLocalComments().map { entities ->
+            entities.map { entity ->
+                Comment(
+                    postId = entity.postId,
+                    id = entity.id + 10000,
+                    name = entity.name,
+                    email = entity.email,
+                    body = entity.body
+                )
+            }
+        }
+    }
+
     // Adiciona um comentário local chamando o DAO numa thread de IO (background)
     suspend fun addLocalComment(postId: Int, name: String, email: String, body: String) {
         withContext(Dispatchers.IO) {

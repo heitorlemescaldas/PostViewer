@@ -16,4 +16,8 @@ interface LocalCommentDao {
     // Insere um novo comentário de forma síncrona para evitar bugs de KSP
     @Insert
     fun insertLocalComment(comment: LocalCommentEntity)
+
+    // Retorna todos os comentários locais
+    @Query("SELECT * FROM local_comments")
+    fun getAllLocalComments(): Flow<List<LocalCommentEntity>>
 }

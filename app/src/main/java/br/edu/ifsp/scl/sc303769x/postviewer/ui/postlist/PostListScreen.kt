@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.edu.ifsp.scl.sc303769x.postviewer.model.Post
+import br.edu.ifsp.scl.sc303769x.postviewer.ui.postdetail.CommentItem
+import br.edu.ifsp.scl.sc303769x.postviewer.ui.postlist.PostUiModel
+import org.w3c.dom.Comment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +73,7 @@ fun PostListScreen(
 
 // Componente isolado para representar cada cartão de post na lista
 @Composable
-fun PostItem(post: Post, onClick: () -> Unit) {
+fun PostItem(post: PostUiModel, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,6 +94,12 @@ fun PostItem(post: Post, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Comentários: ${post.commentCount}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
